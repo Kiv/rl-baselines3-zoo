@@ -20,6 +20,15 @@ from stable_baselines3.common.vec_env import DummyVecEnv, SubprocVecEnv, VecEnv,
 # For custom activation fn
 from torch import nn as nn  # noqa: F401 pylint: disable=unused-import
 
+# CM
+import sys
+
+sys.path.append("..")
+from w3d2_part2_dqn_solution import MLAB_DQN
+from w3d3_ppo_solution import MLAB_PPO
+
+# END CM
+
 ALGOS = {
     "a2c": A2C,
     "ddpg": DDPG,
@@ -33,6 +42,10 @@ ALGOS = {
     "tqc": TQC,
     "trpo": TRPO,
     "ppo_lstm": RecurrentPPO,
+    # CM
+    "mlab_dqn": MLAB_DQN,
+    "mlab_ppo": MLAB_PPO,
+    # END CM
 }
 
 
@@ -330,7 +343,9 @@ def get_hf_trained_models(organization: str = "sb3", check_filename: bool = Fals
         model_name = ModelName(algo, env_name)
 
         # check if there is a model file in the repo
-        if check_filename and not any(f.rfilename == model_name.filename for f in api.model_info(model.modelId).siblings):
+        if check_filename and not any(
+            f.rfilename == model_name.filename for f in api.model_info(model.modelId).siblings
+        ):
             continue  # skip model if the repo contains no properly named model file
 
         trained_models[model_name] = (algo, env_id)
